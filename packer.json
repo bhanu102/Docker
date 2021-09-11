@@ -1,0 +1,32 @@
+{
+  "_comment": "Create a AWS AMI ith AMZ Linux 2018 with Java and Tomcat",
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": ""
+  },
+  "builders": [
+    {
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "type": "amazon-ebs",
+      "region": "us-east-1",
+      "source_ami": "ami-0747bdcabd34c712a",
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "ami_name": "DevOpsClass-Build-{{isotime | clean_resource_name}}",
+      "vpc_id": "vpc-0dbc36684bb6c8972",
+      "subnet_id": "subnet-033f3a21c09a57fbd"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sleep 30",
+        "sudo curl -o docker_install.sh https://raw.githubusercontent.com/bhanu102/Installation_scripts/master/Docker_Installation.sh",
+        "sudo chmod 700 docker_install.sh",
+        "sudo ./docker_install.sh"
+      ]
+    }
+  ]
+}
